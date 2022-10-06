@@ -69,3 +69,9 @@ impl NoPassBuilder {
         }
     }
 }
+
+impl Default for NoPassBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}

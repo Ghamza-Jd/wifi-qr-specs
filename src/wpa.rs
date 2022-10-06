@@ -87,3 +87,9 @@ impl WPABuilder {
         }
     }
 }
+
+impl Default for WPABuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}

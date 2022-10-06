@@ -87,3 +87,9 @@ impl WEPBuilder {
         }
     }
 }
+
+impl Default for WEPBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
