@@ -8,7 +8,7 @@ pub struct WPA2_EAP {
     phase_2_method: PHASE2METHOD,
     identity: String,
     anonymous_identity: String,
-    eap_method: EAP
+    eap_method: EAP,
 }
 
 #[allow(non_camel_case_types)]
@@ -28,7 +28,7 @@ pub enum PHASE2METHOD {
     /// Password Authentication Protocol
     PAP,
     /// EAP-Subscriber Identity Module [RFC-4186]
-    SIM
+    SIM,
 }
 
 #[allow(non_camel_case_types)]
@@ -52,5 +52,5 @@ pub enum EAP {
     /// Hotspot 2.0 r2 OSEN
     UNAUTH_TLS,
     /// WAPI Certificate
-    WAPI_CERT
+    WAPI_CERT,
 }

@@ -6,6 +6,18 @@ pub struct WPA {
     is_hidden: bool,
 }
 
+pub struct WPABuilder {
+    ssid: Option<String>,
+    password: Option<String>,
+    is_hidden: bool,
+}
+
+pub enum WPAErrors {
+    NoSSID,
+    NoPassword,
+    NoPasswordAndSSID,
+}
+
 impl WPA {
     pub fn builder() -> WPABuilder {
         WPABuilder::new()
@@ -36,18 +48,6 @@ impl WPA {
     fn encode_hidden(&self) -> String {
         format!("H:{};", self.is_hidden)
     }
-}
-
-pub struct WPABuilder {
-    ssid: Option<String>,
-    password: Option<String>,
-    is_hidden: bool,
-}
-
-pub enum WPAErrors {
-    NoSSID,
-    NoPassword,
-    NoPasswordAndSSID,
 }
 
 impl WPABuilder {
@@ -91,5 +91,15 @@ impl WPABuilder {
 impl Default for WPABuilder {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl std::fmt::Display for WPAErrors {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            WPAErrors::NoSSID => write!(f, "No SSID where provided"),
+            WPAErrors::NoPassword => write!(f, "No Password where provided"),
+            WPAErrors::NoPasswordAndSSID => write!(f, "Both SSID and Password where not provided"),
+        }
     }
 }

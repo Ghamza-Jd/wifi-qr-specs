@@ -38,7 +38,7 @@ pub struct NoPassBuilder {
 }
 
 pub enum NoPassErrors {
-    NoSSID
+    NoSSID,
 }
 
 impl NoPassBuilder {
@@ -73,5 +73,13 @@ impl NoPassBuilder {
 impl Default for NoPassBuilder {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl std::fmt::Display for NoPassErrors {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            NoPassErrors::NoSSID => write!(f, "No SSID where provided"),
+        }
     }
 }

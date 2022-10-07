@@ -93,3 +93,13 @@ impl Default for WEPBuilder {
         Self::new()
     }
 }
+
+impl std::fmt::Display for WEPErrors {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            WEPErrors::NoSSID => write!(f, "No SSID where provided"),
+            WEPErrors::NoPassword => write!(f, "No Password where provided"),
+            WEPErrors::NoPasswordAndSSID => write!(f, "Both SSID and Password where not provided"),
+        }
+    }
+}
