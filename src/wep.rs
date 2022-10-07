@@ -52,7 +52,7 @@ pub enum WEPErrors {
 
 impl WEPBuilder {
     pub fn new() -> Self {
-        WEPBuilder {
+        Self {
             ssid: None,
             password: None,
             is_hidden: false,

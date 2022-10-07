@@ -52,7 +52,7 @@ impl WPA {
 
 impl WPABuilder {
     pub fn new() -> Self {
-        WPABuilder {
+        Self {
             ssid: None,
             password: None,
             is_hidden: false,

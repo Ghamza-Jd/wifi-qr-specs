@@ -43,7 +43,7 @@ pub enum NoPassErrors {
 
 impl NoPassBuilder {
     pub fn new() -> Self {
-        NoPassBuilder {
+        Self {
             ssid: None,
             is_hidden: false,
         }
