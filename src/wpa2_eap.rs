@@ -25,6 +25,7 @@ pub struct WPA2_EAPBuilder {
 }
 
 #[allow(non_camel_case_types)]
+#[derive(Clone, Copy)]
 pub enum EAP {
     /// No EAP method used.
     None,
@@ -49,6 +50,7 @@ pub enum EAP {
 }
 
 #[allow(non_camel_case_types)]
+#[derive(Clone, Copy)]
 pub enum PHASE2METHOD {
     /// No phase 2 method used.
     None,
@@ -66,6 +68,15 @@ pub enum PHASE2METHOD {
     PAP,
     /// EAP-Subscriber Identity Module [RFC-4186]
     SIM,
+}
+
+pub enum WPA2_EAPError {
+    NoSSID,
+    NoPassword,
+    NoIdentity,
+    NoAnonymousIdentity,
+    NoEAPMethod,
+    NoPhaseTwoMethod,
 }
 
 impl WPA2_EAP {
@@ -119,11 +130,33 @@ impl WPA2_EAP {
     }
 
     fn encode_eap_method(&self) -> String {
-        format!("E:{};", escape(&self.eap_method.to_string()))
+        let eap = match self.eap_method {
+            EAP::None => String::from(""),
+            EAP::AKA => String::from("AKA"),
+            EAP::AKA_PRIME => String::from("AKA_PRIME"),
+            EAP::PEAP => String::from("PEAP"),
+            EAP::PWD => String::from("PWD"),
+            EAP::SIM => String::from("SIM"),
+            EAP::TLS => String::from("TLS"),
+            EAP::TTLS => String::from("TTLS"),
+            EAP::UNAUTH_TLS => String::from("UNAUTH_TLS"),
+            EAP::WAPI_CERT => String::from("WAPI_CERT"),
+        };
+        format!("E:{};", eap)
     }
 
     fn encode_phase_2_method(&self) -> String {
-        format!("PH2:{};", escape(&self.phase_2_method.to_string()))
+        let p2m = match self.phase_2_method {
+            PHASE2METHOD::None => String::from(""),
+            PHASE2METHOD::AKA => String::from("AKA"),
+            PHASE2METHOD::AKA_PRIME => String::from("AKA_PRIME"),
+            PHASE2METHOD::GTC => String::from("GTC"),
+            PHASE2METHOD::MSCHAP => String::from("MSCHAP"),
+            PHASE2METHOD::MSCHAPV2 => String::from("MSCHAPV2"),
+            PHASE2METHOD::PAP => String::from("PAP"),
+            PHASE2METHOD::SIM => String::from("SIM"),
+        };
+        format!("PH2:{};", p2m)
     }
 }
 
@@ -174,36 +207,32 @@ impl WPA2_EAPBuilder {
         self.phase_2_method = p2m;
         self
     }
-}
 
-impl std::fmt::Display for EAP {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            EAP::None => write!(f, ""),
-            EAP::AKA => write!(f, "AKA"),
-            EAP::AKA_PRIME => write!(f, "AKA_PRIME"),
-            EAP::PEAP => write!(f, "PEAP"),
-            EAP::PWD => write!(f, "PWD"),
-            EAP::SIM => write!(f, "SIM"),
-            EAP::TLS => write!(f, "TLS"),
-            EAP::TTLS => write!(f, "TTLS"),
-            EAP::UNAUTH_TLS => write!(f, "UNAUTH_TLS"),
-            EAP::WAPI_CERT => write!(f, "WAPI_CERT"),
-        }
-    }
-}
-
-impl std::fmt::Display for PHASE2METHOD {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            PHASE2METHOD::None => write!(f, ""),
-            PHASE2METHOD::AKA => write!(f, "AKA"),
-            PHASE2METHOD::AKA_PRIME => write!(f, "AKA_PRIME"),
-            PHASE2METHOD::GTC => write!(f, "GTC"),
-            PHASE2METHOD::MSCHAP => write!(f, "MSCHAP"),
-            PHASE2METHOD::MSCHAPV2 => write!(f, "MSCHAPV2"),
-            PHASE2METHOD::PAP => write!(f, "PAP"),
-            PHASE2METHOD::SIM => write!(f, "SIM"),
-        }
+    pub fn build(&self) -> Result<WPA2_EAP, WPA2_EAPError> {
+        let ssid = self.ssid.as_ref().ok_or(WPA2_EAPError::NoSSID)?.to_string();
+        let identity = self
+            .identity
+            .as_ref()
+            .ok_or(WPA2_EAPError::NoIdentity)?
+            .to_string();
+        let anonymous_identity = self
+            .anonymous_identity
+            .as_ref()
+            .ok_or(WPA2_EAPError::NoAnonymousIdentity)?
+            .to_string();
+        let password = self
+            .password
+            .as_ref()
+            .ok_or(WPA2_EAPError::NoPassword)?
+            .to_string();
+        Ok(WPA2_EAP {
+            ssid,
+            is_hidden: self.is_hidden,
+            identity,
+            anonymous_identity,
+            password,
+            eap_method: self.eap_method,
+            phase_2_method: self.phase_2_method,
+        })
     }
 }
