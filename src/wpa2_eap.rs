@@ -1,9 +1,8 @@
-use std::fmt::format;
-
 use crate::utils::escape;
 
 /// Enterprise configuration details for Wi-Fi.
 /// Stores details about the EAP method and any associated credentials.
+#[allow(non_camel_case_types)]
 pub struct WPA2_EAP {
     ssid: String,
     is_hidden: bool,
@@ -14,6 +13,7 @@ pub struct WPA2_EAP {
     phase_2_method: PHASE2METHOD,
 }
 
+#[allow(non_camel_case_types)]
 pub struct WPA2_EAPBuilder {
     ssid: Option<String>,
     is_hidden: bool,
@@ -70,6 +70,7 @@ pub enum PHASE2METHOD {
     SIM,
 }
 
+#[allow(non_camel_case_types)]
 pub enum WPA2_EAPError {
     NoSSID,
     NoPassword,
@@ -94,9 +95,10 @@ impl WPA2_EAP {
 
     pub fn encode(&self) -> String {
         format!(
-            "WIFI:{}{}{}{}{}{}{};",
+            "WIFI:{}{}{}{}{}{}{}{};",
             self.encode_type(),
             self.encode_ssid(),
+            self.encode_hidden(),
             self.encode_identity(),
             self.encode_anonymous_identity(),
             self.encode_password(),

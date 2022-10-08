@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use wifi_qr_specs::wpa2_eap::{WPA2_EAPError, EAP, PHASE2METHOD, WPA2_EAP};
+    use wifi_qr_specs::wpa2_eap::{EAP, PHASE2METHOD, WPA2_EAP};
 
     #[test]
     fn it_encodes_valid_wifi_forms() {
@@ -17,7 +17,7 @@ mod tests {
             .unwrap();
         assert_eq!(
             wpa2eap.encode(),
-            "WIFI:T:WPA2_EAP;S:ghamza;I:Hamza;A:someone;P:P@ssw0rd;E:TLS;PH2:GTC;;"
+            "WIFI:T:WPA2_EAP;S:ghamza;H:true;I:Hamza;A:someone;P:P@ssw0rd;E:TLS;PH2:GTC;;"
         );
     }
 }
