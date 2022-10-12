@@ -108,7 +108,7 @@ impl WPA2_EAP {
     }
 
     fn encode_type(&self) -> String {
-        String::from("T:WPA2_EAP;")
+        String::from("T:WPA2-EAP;")
     }
 
     fn encode_ssid(&self) -> String {
@@ -128,7 +128,7 @@ impl WPA2_EAP {
     }
 
     fn encode_anonymous_identity(&self) -> String {
-        format!("A:{};", escape(&self.anonymous_identity))
+        format!("AI:{};", escape(&self.anonymous_identity))
     }
 
     fn encode_eap_method(&self) -> String {

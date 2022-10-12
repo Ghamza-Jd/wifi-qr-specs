@@ -10,14 +10,14 @@ mod tests {
             .hidden(true)
             .identity("Hamza")
             .anonymous_identity("someone")
-            .eap_method(EAP::TLS)
-            .phase_2_method(PHASE2METHOD::GTC)
+            .eap_method(EAP::PEAP)
+            .phase_2_method(PHASE2METHOD::MSCHAPV2)
             .build()
             .ok()
             .unwrap();
         assert_eq!(
             wpa2eap.encode(),
-            "WIFI:T:WPA2_EAP;S:ghamza;H:true;I:Hamza;A:someone;P:P@ssw0rd;E:TLS;PH2:GTC;;"
+            "WIFI:T:WPA2-EAP;S:ghamza;H:true;I:Hamza;AI:someone;P:P@ssw0rd;E:PEAP;PH2:MSCHAPV2;;"
         );
     }
 }
